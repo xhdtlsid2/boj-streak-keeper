@@ -52,12 +52,9 @@ async function autoSubmit(){
 			const problemNo = path.parse(files[0]).name;
 			await driver.get("https://acmicpc.net/submit/" + problemNo);
 			const submitForm = await driver.findElement(By.id("submit_form"));
-			/**
-			 * if you want to select language, use code below:
-			 * 
-			 *     const language = "(language name)";
-			 *     await submitForm.findElement(By.css(".chosen-search-input")).sendKeys(language, Key.RETURN);
-			 */
+			if(path.parse(files[0]).ext == ".py"){
+				await submitForm.findElement(By.css(".chosen-search-input")).sendKeys("PyPy3", Key.RETURN);
+			}
 			const codeMirror = await driver.findElement(By.className("CodeMirror"));
 			const sourceCode = fs.readFileSync("./sources/" + files[0]).toString();
 			await driver.executeScript("arguments[0].CodeMirror.setValue(arguments[1]);", codeMirror, sourceCode);
