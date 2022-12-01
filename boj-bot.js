@@ -32,7 +32,7 @@ async function autoSubmit(){
 		.build();
 
 	//login
-	await driver.get("https://acmicpc.net/status");
+	await driver.get("https://help.acmicpc.net/");	//contains no big images or ads; faster load
 	await driver.manage().deleteCookie("OnlineJudge");
 	// to set custom cookie value:
 	// 1. go to acmicpc.net
@@ -67,7 +67,7 @@ async function autoSubmit(){
 		}
 		else if(currentTime - lastRefreshTime > refreshInterval){
 			lastRefreshTime = currentTime;
-			await driver.get("https://acmicpc.net/status");		//contains no big images or ads; faster load
+			await driver.get("https://help.acmicpc.net/");
 		}
 	}
 }
