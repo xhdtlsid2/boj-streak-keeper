@@ -25,12 +25,7 @@ async function directLogin(driver){
 	await setTimeout(10000);
 }
 
-async function autoSubmit(){
-	let driver = await new Builder()
-		.forBrowser("chrome")
-		.setChromeOptions(new chrome.Options().headless())
-		.build();
-
+async function autoSubmit(driver){
 	//login
 	await driver.get("https://www.acmicpc.net/404");	//contains no big images or ads; faster load
 	await driver.manage().deleteCookie("OnlineJudge");
@@ -50,7 +45,6 @@ async function autoSubmit(){
 			lastSubmitTime = lastRefreshTime = currentTime;
 			const files = fs.readdirSync("./sources");
 			if(files.length == 0){
-				await driver.quit();
 				return Promise.reject(new Error("no codes to submit"));
 			}
 			const problemNo = path.parse(files[0]).name;
@@ -72,6 +66,16 @@ async function autoSubmit(){
 	}
 }
 
-autoSubmit().catch((error) => {
-	console.log(error);
-});
+async function run(){
+	let driver = await new Builder()
+		.forBrowser("chrome")
+		.setChromeOptions(new chrome.Options().headless())
+		.build();
+		
+	await autoSubmit(driver).catch(async (error) => {
+		console.log(error);
+		await driver.quit();
+	});
+}
+
+run();
